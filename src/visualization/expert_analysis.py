@@ -653,7 +653,200 @@ def print_routing_statistics(stats):
         f"{stats['normalized_entropy'].item():.4f}"
     )
 
+# ---------------------------------------------------------------------
+# Structure-response correlations
+# ---------------------------------------------------------------------
 
+def plot_structure_correlations(
+    structure_results,
+    mode="response",
+    title=None,
+    expert_labels=None,
+):
+    """
+    Plot correlations between expert responses/routed responses
+    and structural properties of the input.
+
+    Args:
+        structure_results:
+            Dictionary containing correlation results for each
+            structural property.
+
+            Expected structure:
+
+                structure_results["gradient"]["response"]
+                structure_results["gradient"]["routed"]
+
+                structure_results["inplane_gradient"]["response"]
+                structure_results["inplane_gradient"]["routed"]
+
+                structure_results["depth_gradient"]["response"]
+                structure_results["depth_gradient"]["routed"]
+
+                structure_results["laplacian"]["response"]
+                structure_results["laplacian"]["routed"]
+
+            Each entry should contain correlations across test
+            volumes with shape [N, K].
+
+        mode:
+            "response":
+                Correlation between expert response A_k and the
+                structural property S.
+
+            "routed":
+                Correlation between routed response w_k A_k and
+                the structural property S.
+
+        title:
+            Optional plot title.
+
+        expert_labels:
+            Optional list of expert labels. If None, generic
+            expert labels are used.
+
+    Returns:
+        matrix:
+            NumPy array of shape [4, K] containing mean correlations.
+    """
+
+    # ---------------------------------------------------------------
+    # Validate mode
+    # ---------------------------------------------------------------
+
+    valid_modes = {
+        "response",
+        "routed",
+    }
+
+    if mode not in valid_modes:
+        raise ValueError(
+            f"Invalid mode '{mode}'. "
+            f"Expected one of {sorted(valid_modes)}."
+        )
+
+    # ---------------------------------------------------------------
+    # Structural properties
+    # ---------------------------------------------------------------
+
+    structure_names = [
+        "gradient",
+        "inplane_gradient",
+        "depth_gradient",
+        "laplacian",
+    ]
+
+    structure_labels = [
+        "Gradient",
+        "In-plane gradient",
+        "Depth gradient",
+        "Laplacian",
+    ]
+
+    # ---------------------------------------------------------------
+    # Build correlation matrix
+    # ---------------------------------------------------------------
+
+    matrix = []
+
+    for name in structure_names:
+
+        if name not in structure_results:
+            raise KeyError(
+                f"Missing '{name}' from structure_results."
+            )
+
+        if mode not in structure_results[name]:
+            raise KeyError(
+                f"Missing mode '{mode}' for "
+                f"structure '{name}'."
+            )
+
+        correlations = np.asarray(
+            structure_results[name][mode]
+        )
+
+        if correlations.ndim != 2:
+            raise ValueError(
+                f"Expected correlations for '{name}' "
+                f"to have shape [N, K], "
+                f"got {correlations.shape}."
+            )
+
+        # Mean across test volumes.
+        mean_corr = correlations.mean(
+            axis=0
+        )
+
+        matrix.append(
+            mean_corr
+        )
+
+    matrix = np.stack(
+        matrix,
+        axis=0,
+    )
+
+    K = matrix.shape[1]
+
+    # ---------------------------------------------------------------
+    # Expert labels
+    # ---------------------------------------------------------------
+
+    if expert_labels is None:
+
+        expert_labels = [
+            f"E{k}"
+            for k in range(K)
+        ]
+
+    if len(expert_labels) != K:
+        raise ValueError(
+            f"Expected {K} expert labels, "
+            f"got {len(expert_labels)}."
+        )
+
+    # ---------------------------------------------------------------
+    # Plot
+    # ---------------------------------------------------------------
+
+    plt.figure(
+        figsize=(7, 5)
+    )
+
+    sns.heatmap(
+        matrix,
+        annot=True,
+        fmt=".3f",
+        vmin=-1,
+        vmax=1,
+        center=0,
+        xticklabels=expert_labels,
+        yticklabels=structure_labels,
+        square=True,
+        cmap="coolwarm",
+    )
+
+    plt.xlabel("Expert")
+    plt.ylabel("Structural property")
+
+    if title is not None:
+        plt.title(title)
+    else:
+        if mode == "response":
+            plt.title(
+                "Expert Response–Structure Correlation"
+            )
+        else:
+            plt.title(
+                "Routed Response–Structure Correlation"
+            )
+
+    plt.tight_layout()
+    plt.show()
+
+    return matrix
+    
 # from src.visualization.expert_analysis import (
 #     analyze_expert_response,
 #     plot_expert_correlation,
