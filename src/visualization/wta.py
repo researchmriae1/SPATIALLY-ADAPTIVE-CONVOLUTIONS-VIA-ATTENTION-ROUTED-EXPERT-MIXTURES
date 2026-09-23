@@ -1,3 +1,12 @@
+from .routing import (
+    _get_expert_names,
+    _get_display_indices,
+    _format_labels,
+    DECODER_DISPLAY_ORDER,
+    DECODER_LABELS,
+)
+
+
 # ---------------------------------------------------------------------
 # Winner-takes-all routing
 # ---------------------------------------------------------------------
