@@ -885,3 +885,29 @@ def plot_structure_correlations(
 # )
 
 # print_routing_statistics(stats)
+
+# structure_response_matrix = plot_structure_correlations(
+#     structure_results,
+#     mode="response",
+#     title="Response",
+#     expert_labels=[
+#         "Low-frequency",
+#         "High-frequency",
+#         "Spatial",
+#         "Pointwise",
+#         "Through-plane",
+#     ],
+# )
+
+# structure_routed_matrix = plot_structure_correlations(
+#     structure_results,
+#     mode="routed",
+#     title="Routed",
+#     expert_labels=[
+#         "Low-frequency",
+#         "High-frequency",
+#         "Spatial",
+#         "Pointwise",
+#         "Through-plane",
+#     ],
+# )
