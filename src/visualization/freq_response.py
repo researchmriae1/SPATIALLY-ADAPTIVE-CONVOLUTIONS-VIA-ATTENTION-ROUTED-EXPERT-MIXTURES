@@ -523,9 +523,10 @@ def plot_routing_distribution_shift(
     plt.show()
 
 # from src.visualization.freq_response import (
-#     measure_frequency_routing,
-#     routing_distribution_shift,
+#     measure_frequency_response_and_routing,
+#     plot_frequency_response,
 #     plot_frequency_routing,
+#     routing_distribution_shift,
 #     plot_routing_distribution_shift,
 # )
 
@@ -543,44 +544,39 @@ def plot_routing_distribution_shift(
 # ]
 
 
-# routing_x = measure_frequency_routing(
+# routing, response = measure_frequency_response_and_routing(
 #     model=ae,
 #     frequencies=frequencies,
 #     size=(128, 128, 128),
 #     axis="x",
 #     amplitude=1.0,
+#     phase=0.0,
 #     device=device,
 # )
 
 
-# shift_x = routing_distribution_shift(
-#     routing_x
+# # Unrouted expert response
+# plot_frequency_response(
+#     frequencies,
+#     response,
+#     title="Unrouted Expert Response vs. Spatial Frequency",
 # )
 
 
+# # Routing weights
 # plot_frequency_routing(
 #     frequencies,
-#     routing_x,
-#     title=None,
+#     routing,
+#     title="Routing Weight vs. Spatial Frequency",
 # )
 
+
+# # Routing distribution shift
+# shift_x = routing_distribution_shift(
+#     routing
+# )
 
 # plot_routing_distribution_shift(
 #     frequencies,
 #     shift_x,
-# )
-
-# expert_labels = [
-#     "Low-frequency",
-#     "High-frequency",
-#     "Spatial",
-#     "Pointwise",
-#     "Through-plane",
-# ]
-
-# plot_frequency_routing(
-#     frequencies,
-#     routing_x,
-#     title=None,
-#     expert_labels=expert_labels,
 # )
