@@ -62,6 +62,7 @@ The resulting expert contributions are combined using a soft spatial mixture.
 ├── configs/
 │   ├── ae.py
 │   ├── data.py
+│   └── frequency_response.py
 │
 ├── data/
 │   ├── __init__.py
@@ -89,6 +90,9 @@ The resulting expert contributions are combined using a soft spatial mixture.
 │   ├── train_ae.py
 │   └── analyze_ae.py
 │
+├── datasets/
+├── checkpoints/
+├── notebooks/
 ├── figures/
 ├── README.md
 ├── CITATION.cff
