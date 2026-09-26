@@ -91,9 +91,7 @@ The resulting expert contributions are combined using a soft spatial mixture.
 │   ├── train_ae.py
 │   └── analyze_ae.py
 │
-├── notebooks/
 ├── figures/
 ├── README.md
-├── CITATION.cff
 └── LICENSE
 ```
