@@ -9,11 +9,11 @@ experts and spatially varying attention-based routing.
 Rather than dynamically modifying convolutional kernel parameters, our
 formulation keeps the expert operators fixed and learns spatially varying
 weights over their outputs:
-
+$$
 \[
 y(p) = \sum_{k=1}^{K} w_k(p) F_k(x)(p),
 \]
-
+$$
 where \(F_k\) denotes the transformation performed by expert \(k\), and
 \(w_k(p)\) is its spatially varying routing weight.
 
