@@ -22,7 +22,7 @@ resulting expert responses, spatial routing behavior, structural associations,
 and frequency-dependent responses.
 
 ---
-![Model Architecture](figures/architecture_diagram.png)
+![Model Architecture](figures/architecture_diagram.jpg)
 ## Overview
 
 Conventional convolution applies the same learned transformation across the
