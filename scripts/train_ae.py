@@ -8,7 +8,7 @@ from torch.utils.data import DataLoader
 from configs import ae, data
 from data import MRIDataset
 from models import AutoEncoder
-from training.train import train_model
+from training import train_model
 
 
 def set_seed(seed):
@@ -50,7 +50,8 @@ def create_dataloaders():
         "num_workers": data.NUM_WORKERS,
         "pin_memory": data.PIN_MEMORY,
         "persistent_workers": (
-            data.PERSISTENT_WORKERS and data.NUM_WORKERS > 0
+            data.PERSISTENT_WORKERS
+            and data.NUM_WORKERS > 0
         ),
     }
 
@@ -97,10 +98,20 @@ def create_model(device):
 
 
 def main():
+
+    # ------------------------------------------------------------
+    # Reproducibility
+    # ------------------------------------------------------------
+
     set_seed(ae.SEED)
 
+    # ------------------------------------------------------------
+    # Device
+    # ------------------------------------------------------------
+
     device = torch.device(
-        "cuda" if torch.cuda.is_available() else "cpu"
+        "cuda" if torch.cuda.is_available()
+        else "cpu"
     )
 
     print(f"Device: {device}")
@@ -110,24 +121,60 @@ def main():
             f"GPU: {torch.cuda.get_device_name(0)}"
         )
 
-    train_loader, val_loader, test_loader = create_dataloaders()
+    # ------------------------------------------------------------
+    # Data
+    # ------------------------------------------------------------
+
+    train_loader, val_loader, test_loader = (
+        create_dataloaders()
+    )
+
+    # ------------------------------------------------------------
+    # Model
+    # ------------------------------------------------------------
 
     model = create_model(device)
+
+    # ------------------------------------------------------------
+    # Optimizer
+    # ------------------------------------------------------------
+
+    optimizer = torch.optim.AdamW(
+        model.parameters(),
+        lr=ae.LEARNING_RATE,
+        weight_decay=ae.WEIGHT_DECAY,
+    )
+
+    # ------------------------------------------------------------
+    # Checkpoint path
+    # ------------------------------------------------------------
+
+    os.makedirs(
+        ae.CHECKPOINT_DIR,
+        exist_ok=True,
+    )
+
+    save_path = os.path.join(
+        ae.CHECKPOINT_DIR,
+        ae.BEST_CHECKPOINT_NAME,
+    )
+
+    # ------------------------------------------------------------
+    # Training
+    # ------------------------------------------------------------
 
     history = train_model(
         model=model,
         train_loader=train_loader,
         val_loader=val_loader,
+        optimizer=optimizer,
         device=device,
         num_epochs=ae.NUM_EPOCHS,
-        learning_rate=ae.LEARNING_RATE,
-        weight_decay=ae.WEIGHT_DECAY,
-        checkpoint_dir=ae.CHECKPOINT_DIR,
+        save_path=save_path,
     )
 
-    print("Training complete.")
-
-    return model, history, test_loader
+    print("\nTraining complete.")
+    print(f"Best checkpoint: {save_path}")
 
 
 if __name__ == "__main__":
