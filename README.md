@@ -34,11 +34,11 @@ The expert bank contains operators with different local structures:
 
 | Expert | Operator | Intended structural bias |
 |--------|----------|---------------------------|
-| \(E_0\) | \(1\times3\times3\) average pooling + \(1\times1\times1\) convolution | In-plane smoothing |
-| \(E_1\) | \(1\times1\times1\) convolution | Pointwise transformation |
-| \(E_2\) | \(1\times3\times3\) convolution | In-plane spatial mixing |
-| \(E_3\) | \(3\times1\times1\) convolution | Through-plane/depth mixing |
-| \(E_4\) | \(1\times1\times1\) convolution | Independent pointwise transformation |
+| $E_0$ | $1\times3\times3$ average pooling + \(1\times1\times1\) convolution | In-plane smoothing |
+| $E_1$ | $1\times1\times1$ convolution | Pointwise transformation |
+| $E_2$ | $1\times3\times3$ convolution | In-plane spatial mixing |
+| $E_3$ | $3\times1\times1$ convolution | Through-plane/depth mixing |
+| $E_4$ | $1\times1\times1$ convolution | Independent pointwise transformation |
 
 The encoder uses localized spatial windows to construct routing tokens.
 Self-attention processes these tokens and produces expert logits, which are
