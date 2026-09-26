@@ -75,7 +75,7 @@ The resulting expert contributions are combined using a soft spatial mixture.
 │   ├── ShapedEncoder3D.py
 │   └── Decoder.py
 │
-├── training/
+├── train/
 │   ├── __init__.py
 │   ├── train.py
 │   └── checkpoint.py
