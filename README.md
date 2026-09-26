@@ -9,13 +9,13 @@ experts and spatially varying attention-based routing.
 Rather than dynamically modifying convolutional kernel parameters, our
 formulation keeps the expert operators fixed and learns spatially varying
 weights over their outputs:
+
 $$
-\[
-y(p) = \sum_{k=1}^{K} w_k(p) F_k(x)(p),
-\]
+y(p) = \sum_{k=1}^{K} w_k(p)F_k(x)(p)
 $$
-where \(F_k\) denotes the transformation performed by expert \(k\), and
-\(w_k(p)\) is its spatially varying routing weight.
+
+where $F_k$ denotes the transformation performed by expert $k$, and
+$w_k(p)$ is its spatially varying routing weight.
 
 We use 3D MRI reconstruction as a testbed and focus on characterizing the
 resulting expert responses, spatial routing behavior, structural associations,
